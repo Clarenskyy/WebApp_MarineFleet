@@ -25,21 +25,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-ESP32_IP = "192.168.18.170"
+ESP32_IP = "192.168.62.54"
 
 @app.post("/update-sensors")
 async def update_sensors(request: Request, db: Session = Depends(get_db)):
     data = await request.json()
-    front = data.get("front", 0)
-    left = data.get("left", 0)
-    right = data.get("right", 0)
+    front = data.get("front") or data.get("frontDistance", 0)
+    left = data.get("left") or data.get("leftDistance", 0)
+    right = data.get("right") or data.get("rightDistance", 0)
+    speed = data.get("motorSpeed", 0)
 
-    sensor = SensorData(front=front, left=left, right=right)
+    sensor = SensorData(front=front, left=left, right=right, motor_speed=speed)
     db.add(sensor)
     db.commit()
     db.refresh(sensor)
 
-    return {"message": "Sensor data saved", "id": sensor.id}
+    return {
+        "message": "Sensor data saved",
+        "id": sensor.id,
+        "front": front,
+        "left": left,
+        "right": right,
+        "motor_speed": speed
+    }
+
 
 @app.get("/sensor-data")
 def get_sensor_data(db: Session = Depends(get_db)):
@@ -49,9 +58,18 @@ def get_sensor_data(db: Session = Depends(get_db)):
             "front": latest.front,
             "left": latest.left,
             "right": latest.right,
+            "motor_speed": latest.motor_speed,  # ✅ This line is needed
             "timestamp": latest.timestamp,
         }
-    return {"front": 0, "left": 0, "right": 0, "timestamp": None}
+    return {
+        "front": 0,
+        "left": 0,
+        "right": 0,
+        "motor_speed": 0,
+        "timestamp": None
+    }
+
+
 
 @app.post("/toggle")
 async def toggle_power(request: Request, db: Session = Depends(get_db)):
@@ -60,7 +78,8 @@ async def toggle_power(request: Request, db: Session = Depends(get_db)):
 
     esp32_online = True
     try:
-        esp_response = requests.post(f"http://{ESP32_IP}/power", json={"status": desired_status}, timeout=2)
+        # ✅ Correct method for ESP32
+        esp_response = requests.get(f"http://{ESP32_IP}/toggle", timeout=20)
         print("ESP32 responded:", esp_response.text)
     except requests.exceptions.RequestException as e:
         print("Failed to contact ESP32:", e)
@@ -78,10 +97,12 @@ async def toggle_power(request: Request, db: Session = Depends(get_db)):
         "esp32_online": esp32_online,
     }
 
+
 @app.get("/power-status")
 def get_power_status(db: Session = Depends(get_db)):
     latest = db.query(PowerState).order_by(PowerState.timestamp.desc()).first()
     return {"status": latest.status if latest else "off", "timestamp": latest.timestamp if latest else None}
+
 
 
 @app.post("/signup")
@@ -124,3 +145,8 @@ async def login(request: Request, db: Session = Depends(get_db)):
 @app.post("/logout")
 async def logout():
     return {"message": "Logout successful (simulated)"}
+
+@app.get("/debug/sensors")
+def debug_all_sensors(db: Session = Depends(get_db)):
+    sensors = db.query(SensorData).all()
+    return [{"id": s.id, "front": s.front, "left": s.left, "right": s.right, "motor_speed": s.motor_speed, "timestamp": s.timestamp} for s in sensors]

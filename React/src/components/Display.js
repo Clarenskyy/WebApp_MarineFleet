@@ -7,8 +7,10 @@ function Display() {
   const [left, setLeft] = useState(100);
   const [right, setRight] = useState(100);
   const [notification, setNotification] = useState("");
+  const [motorSpeed, setMotorSpeed] = useState(0);
 
-  const ESP32_IP = "192.168.18.170"; // Replace with your ESP32 IP
+
+  const ESP32_IP = "192.168.62.54"; // Replace with your ESP32 IP
   const ROBOFLOW_API_KEY = "PoT0jzGUtNb0bQOEf0Ja";
   const MODEL_ENDPOINT = "https://detect.roboflow.com/YOUR_MODEL/1";
 
@@ -41,7 +43,7 @@ function Display() {
 
   // On mount, fetch current status from FastAPI
   useEffect(() => {
-    const fetchStatus = async () => {
+    const interval = setInterval(async () => {
       try {
         const res = await fetch("http://127.0.0.1:8000/power-status");
         const data = await res.json();
@@ -49,35 +51,39 @@ function Display() {
       } catch (err) {
         console.error("Failed to get power status:", err);
       }
-    };
-    fetchStatus();
+    }, 2000);
+
+    return () => clearInterval(interval);
   }, []);
+
 
   // Fetch sensor data periodically if power is ON
   useEffect(() => {
     if (isOn) {
-      const interval = setInterval(async () => {
-        try {
-          const response = await fetch("http://127.0.0.1:8000/sensor-data");
-          const data = await response.json();
+  const interval = setInterval(async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/sensor-data");
+      const data = await response.json();
 
-          setFront(data.front);
-          setLeft(data.left);
-          setRight(data.right);
+      setFront(data.front);
+      setLeft(data.left);
+      setRight(data.right);
+      setMotorSpeed(data.motor_speed); // <- Add this
 
-          if (data.front <= 50) {
-            setNotification("Obstacles ahead detected...steering left automatically");
-          } else if (data.right <= 50) {
-            setNotification("Obstacles in right detected...steering left automatically");
-          } else if (data.left <= 50) {
-            setNotification("Obstacles in left detected...steering right automatically");
-          } else {
-            setNotification("");
-          }
-        } catch (error) {
-          console.error("Failed to fetch sensor data:", error);
-        }
-      }, 1000);
+      if (data.front <= 50) {
+        setNotification("Obstacles ahead detected...steering left automatically");
+      } else if (data.right <= 50) {
+        setNotification("Obstacles in right detected...steering left automatically");
+      } else if (data.left <= 50) {
+        setNotification("Obstacles in left detected...steering right automatically");
+      } else {
+        setNotification("");
+      }
+    } catch (error) {
+      console.error("Failed to fetch sensor data:", error);
+    }
+  }, 1000);
+
 
       return () => clearInterval(interval);
     } else {
@@ -85,6 +91,8 @@ function Display() {
       setLeft("");
       setRight("");
       setNotification("");
+      setMotorSpeed(0);
+
     }
   }, [isOn]);
 
@@ -142,7 +150,7 @@ function Display() {
               <span className="value">{isOn ? "Active" : "Inactive"}</span>
             </div>
             <div className="status-item">
-              <strong>Speed:</strong> <span className="value">--</span>
+              <strong>Speed:</strong> <span className="value">{motorSpeed} rpm</span>
             </div>
             <div className="status-item-title">
               <strong>Scanning the perimeter from:</strong>

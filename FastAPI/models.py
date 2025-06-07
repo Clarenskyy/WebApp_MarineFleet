@@ -1,24 +1,30 @@
-# models.py
-
 from sqlalchemy import Column, Integer, String, Float, DateTime
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
-from database import Base
+from datetime import datetime
+
+Base = declarative_base()
+
 
 class SensorData(Base):
     __tablename__ = "sensor_data"
-
+    
     id = Column(Integer, primary_key=True, index=True)
-    front = Column(Float, default=0)
-    left = Column(Float, default=0)
-    right = Column(Float, default=0)
-    timestamp = Column(DateTime(timezone=True), server_default=func.now())
+    front = Column(Float)
+    left = Column(Float)
+    right = Column(Float)
+    motor_speed = Column(Float)
+    timestamp = Column(DateTime, default=datetime.utcnow)  # ✅ THIS IS REQUIRED
+
+
 
 class PowerState(Base):
     __tablename__ = "power_state"
 
     id = Column(Integer, primary_key=True, index=True)
-    status = Column(String, default="off")  # "on" or "off"
+    status = Column(String, default="off")  # Values: "on" or "off"
     timestamp = Column(DateTime(timezone=True), server_default=func.now())
+
 
 class User(Base):
     __tablename__ = "users"
