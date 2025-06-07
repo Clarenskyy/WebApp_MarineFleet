@@ -30,12 +30,20 @@ ESP32_IP = "192.168.62.54"
 @app.post("/update-sensors")
 async def update_sensors(request: Request, db: Session = Depends(get_db)):
     data = await request.json()
+
     front = data.get("front") or data.get("frontDistance", 0)
     left = data.get("left") or data.get("leftDistance", 0)
     right = data.get("right") or data.get("rightDistance", 0)
     speed = data.get("motorSpeed", 0)
+    rudder_direction = data.get("rudderDirection", "Going straight...")
 
-    sensor = SensorData(front=front, left=left, right=right, motor_speed=speed)
+    sensor = SensorData(
+        front=front,
+        left=left,
+        right=right,
+        motor_speed=speed,
+        rudder_direction=rudder_direction
+    )
     db.add(sensor)
     db.commit()
     db.refresh(sensor)
@@ -46,7 +54,8 @@ async def update_sensors(request: Request, db: Session = Depends(get_db)):
         "front": front,
         "left": left,
         "right": right,
-        "motor_speed": speed
+        "motor_speed": speed,
+        "rudder_direction": rudder_direction
     }
 
 
@@ -58,7 +67,8 @@ def get_sensor_data(db: Session = Depends(get_db)):
             "front": latest.front,
             "left": latest.left,
             "right": latest.right,
-            "motor_speed": latest.motor_speed,  # ✅ This line is needed
+            "motor_speed": latest.motor_speed,
+            "rudder_direction": latest.rudder_direction,
             "timestamp": latest.timestamp,
         }
     return {
@@ -66,6 +76,7 @@ def get_sensor_data(db: Session = Depends(get_db)):
         "left": 0,
         "right": 0,
         "motor_speed": 0,
+        "rudder_direction": "Going straight...",
         "timestamp": None
     }
 
@@ -98,10 +109,31 @@ async def toggle_power(request: Request, db: Session = Depends(get_db)):
     }
 
 
+import requests
+
+ESP32_IP = "192.168.62.54"  # Set your actual ESP32 IP
+
 @app.get("/power-status")
-def get_power_status(db: Session = Depends(get_db)):
-    latest = db.query(PowerState).order_by(PowerState.timestamp.desc()).first()
-    return {"status": latest.status if latest else "off", "timestamp": latest.timestamp if latest else None}
+def get_power_status():
+    try:
+        response = requests.get(f"http://{ESP32_IP}/status", timeout=5)
+        raw_status = response.text.strip().upper()
+
+        # ESP32 returns plain "ON" or "OFF"
+        is_on = raw_status == "ON"
+        return {
+            "status": "on" if is_on else "off",
+            "esp32_online": True
+        }
+
+    except requests.exceptions.RequestException as e:
+        print("ESP32 unreachable:", e)
+        return {
+            "status": "off",
+            "esp32_online": False
+        }
+
+
 
 
 

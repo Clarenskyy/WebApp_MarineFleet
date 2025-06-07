@@ -13,8 +13,9 @@ class SensorData(Base):
     front = Column(Float)
     left = Column(Float)
     right = Column(Float)
-    motor_speed = Column(Float)
-    timestamp = Column(DateTime, default=datetime.utcnow)  # ✅ THIS IS REQUIRED
+    motor_speed = Column(Float)  # ✅ You missed this
+    rudder_direction = Column(String)
+    timestamp = Column(DateTime, default=datetime.utcnow)
 
 
 

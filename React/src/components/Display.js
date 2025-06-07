@@ -6,15 +6,12 @@ function Display() {
   const [front, setFront] = useState(100);
   const [left, setLeft] = useState(100);
   const [right, setRight] = useState(100);
-  const [notification, setNotification] = useState("");
   const [motorSpeed, setMotorSpeed] = useState(0);
+  const [rudderDirection, setRudderDirection] = useState("Going straight...");
+  const [esp32Status, setEsp32Status] = useState(""); // ⚠️ ESP32 connectivity warnings
 
+  const ESP32_IP = "192.168.62.54";
 
-  const ESP32_IP = "192.168.62.54"; // Replace with your ESP32 IP
-  const ROBOFLOW_API_KEY = "PoT0jzGUtNb0bQOEf0Ja";
-  const MODEL_ENDPOINT = "https://detect.roboflow.com/YOUR_MODEL/1";
-
-  // Toggle relay state via FastAPI
   const toggleSwitch = async () => {
     try {
       const res = await fetch("http://127.0.0.1:8000/toggle", {
@@ -29,70 +26,65 @@ function Display() {
       setIsOn(data.status === "on");
 
       if (!data.esp32_online) {
-        setNotification("⚠️ ESP32 device is offline or unreachable.");
+        setEsp32Status("⚠️ ESP32 device is offline or unreachable.");
       } else {
-        setNotification(""); // Clear if it's back
+        setEsp32Status("");
       }
 
       console.log("Toggle response:", data);
     } catch (err) {
       console.error("Failed to toggle via backend:", err);
-      setNotification("⚠️ Backend communication failed.");
+      setEsp32Status("⚠️ Backend communication failed.");
     }
   };
 
-  // On mount, fetch current status from FastAPI
+  // Get current status from ESP32 via backend
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
         const res = await fetch("http://127.0.0.1:8000/power-status");
         const data = await res.json();
         setIsOn(data.status === "on");
+
+        if (!data.esp32_online) {
+          setEsp32Status("⚠️ ESP32 device is offline or unreachable.");
+        } else {
+          setEsp32Status("");
+        }
       } catch (err) {
         console.error("Failed to get power status:", err);
+        setEsp32Status("⚠️ Backend communication failed.");
       }
     }, 2000);
 
     return () => clearInterval(interval);
   }, []);
 
-
-  // Fetch sensor data periodically if power is ON
+  // Fetch sensor data if ON
   useEffect(() => {
     if (isOn) {
-  const interval = setInterval(async () => {
-    try {
-      const response = await fetch("http://127.0.0.1:8000/sensor-data");
-      const data = await response.json();
+      const interval = setInterval(async () => {
+        try {
+          const response = await fetch("http://127.0.0.1:8000/sensor-data");
+          const data = await response.json();
 
-      setFront(data.front);
-      setLeft(data.left);
-      setRight(data.right);
-      setMotorSpeed(data.motor_speed); // <- Add this
-
-      if (data.front <= 50) {
-        setNotification("Obstacles ahead detected...steering left automatically");
-      } else if (data.right <= 50) {
-        setNotification("Obstacles in right detected...steering left automatically");
-      } else if (data.left <= 50) {
-        setNotification("Obstacles in left detected...steering right automatically");
-      } else {
-        setNotification("");
-      }
-    } catch (error) {
-      console.error("Failed to fetch sensor data:", error);
-    }
-  }, 1000);
-
+          setFront(data.front);
+          setLeft(data.left);
+          setRight(data.right);
+          setMotorSpeed(data.motor_speed);
+          setRudderDirection(data.rudder_direction);
+        } catch (error) {
+          console.error("Failed to fetch sensor data:", error);
+        }
+      }, 1000);
 
       return () => clearInterval(interval);
     } else {
       setFront("");
       setLeft("");
       setRight("");
-      setNotification("");
       setMotorSpeed(0);
-
+      setRudderDirection("");
     }
   }, [isOn]);
 
@@ -112,9 +104,9 @@ function Display() {
               <p>Camera is off</p>
             </div>
           )}
-          {notification.includes("CAM") && (
+          {esp32Status.includes("CAM") && (
             <div className="camera-overlay">
-              <span>{notification}</span>
+              <span>{esp32Status}</span>
             </div>
           )}
           <div className="cam-label">ESP32-CAM</div>
@@ -135,9 +127,9 @@ function Display() {
             <p className="instruction">
               Turn the boat ON or OFF. When powered on, the boat begins to scan autonomously.
             </p>
-            {notification && (
+            {esp32Status && (
               <div className="status-item notification">
-                🚨 {notification}
+                🚨 {esp32Status}
               </div>
             )}
           </div>
@@ -150,7 +142,7 @@ function Display() {
               <span className="value">{isOn ? "Active" : "Inactive"}</span>
             </div>
             <div className="status-item">
-              <strong>Speed:</strong> <span className="value">{motorSpeed} rpm</span>
+              <strong>Motor Speed:</strong> <span className="value">{motorSpeed} rpm</span>
             </div>
             <div className="status-item-title">
               <strong>Scanning the perimeter from:</strong>
@@ -160,12 +152,9 @@ function Display() {
               <strong>Right:</strong> <span className="value">{right !== "" ? `${right}m` : "--"}</span>
               <strong>Left:</strong> <span className="value">{left !== "" ? `${left}m` : "--"}</span>
             </div>
-
-            {notification && (
-              <div className="status-item notification">
-                🚨 {notification}
-              </div>
-            )}
+            <div className="status-item">
+              <strong>Rudder:</strong> <span className="value">🧭 {rudderDirection}</span>
+            </div>
           </div>
         </div>
       </div>
