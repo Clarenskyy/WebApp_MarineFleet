@@ -148,9 +148,9 @@ function Display() {
               <strong>Scanning the perimeter from:</strong>
             </div>
             <div className="status-item">
-              <strong>Front:</strong> <span className="value">{front !== "" ? `${front}m` : "--"}</span>
-              <strong>Right:</strong> <span className="value">{right !== "" ? `${right}m` : "--"}</span>
-              <strong>Left:</strong> <span className="value">{left !== "" ? `${left}m` : "--"}</span>
+              <strong>Front:</strong> <span className="value">{front !== "" ? `${front}cm` : "--"}</span>
+              <strong>Right:</strong> <span className="value">{right !== "" ? `${right}cm` : "--"}</span>
+              <strong>Left:</strong> <span className="value">{left !== "" ? `${left}cm` : "--"}</span>
             </div>
             <div className="status-item">
               <strong>Rudder:</strong> <span className="value">🧭 {rudderDirection}</span>
