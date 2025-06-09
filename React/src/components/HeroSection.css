@@ -1,42 +1,40 @@
-video {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  z-index: -1;
+.page-container {
+  position: relative;
+  min-height: 100%;
 }
 
 .hero-container {
-  /* background: url('/images/img-home.jpg') center center/cover no-repeat; */
   height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
-  object-fit: contain;
+  text-align: center;
+  padding: 0 20px;
 }
 
 .hero-container > h1 {
   color: #fff;
-  font-size: 100px;
+  font-size: 95px;
   margin-top: -100px;
 }
 
 .hero-container > p {
-  margin-top: -3px;
   color: #fff;
   font-size: 32px;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
     'Lucida Sans', Arial, sans-serif;
-  padding: 20px; /* Add spacing on all sides (top, right, bottom, left) */
-  text-align: center; /* Optional: center text within the padding area */
-  max-width: 90%; /* Optional: avoid full-width stretching on larger screens */
+  padding: 20px;
+  max-width: 90%;
 }
 
 .hero-btns {
   margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
 }
 
 .hero-btns .btn {
@@ -47,29 +45,208 @@ video {
   margin-left: 4px;
 }
 
-@media screen and (max-width: 960px) {
-  .hero-container > h1 {
-    font-size: 70px;
-    margin-top: -150px;
-  }
+/* PROTOTYPE DETAILS SECTION */
+.container {
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  padding: 40px 20px;
+  gap: 40px;
+  border-radius: 10px;
+  font-family: sans-serif;
+  color: #fff;
 }
 
-@media screen and (max-width: 768px) {
+/* Image section */
+.image-section {
+  margin-top: 60px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 20px;
+}
+
+.main-image {
+  position: relative;
+  max-width: 500px;
+  flex: 1;
+}
+
+.main-image img {
+  width: 100%;
+  height: auto;
+  max-height: 62vh;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.label {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: darkred;
+  color: white;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 3px;
+}
+
+.views-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  max-width: 480px;
+  flex: 1;
+}
+
+.view-img {
+  position: relative;
+}
+
+.view-img img {
+  width: 100%;
+  height: auto;
+  max-height: 180px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+/* Info section */
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 0 20px;
+}
+
+.description {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 20px;
+  font-size: 18px;
+}
+
+.description-materials {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  font-size: 16px;
+}
+
+.description,
+.materials {
+  flex: 1;
+  min-width: 250px;
+}
+
+.info-section h4,
+.description h4,
+.materials h4 {
+  color: #fff;
+  margin-bottom: 5px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.info-section p,
+.info-section ul,
+.info-section p {
+  color: #ddd;
+  text-align: center;
+  margin-bottom: 5px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+}
+
+.info-section ul {
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.section-divider {
+  width: 90%;
+  height: 3px;
+  background: linear-gradient(to right, #00f0ff, #00d4ff);
+  box-shadow: 0 0 10px #00d4ff;
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+@media screen and (max-width: 480px) {
   .hero-container > h1 {
-    font-size: 50px;
-    margin-top: -100px;
+    font-size: 45px;
+    margin-top: -180px;
   }
 
   .hero-container > p {
-    font-size: 30px;
+    font-size: clamp(1rem, 3vw, 1.25rem);
+    text-align: center;
+    margin-top: 10px;
+    padding: 0 5px;
   }
 
-  .btn-mobile {
-    display: block;
-    text-decoration: none;
+  .hero-btns {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+    gap: 1px;
   }
 
-  .btn {
-    width: 100%;
+  .hero-btns .btn {
+    font-size: 14px;
+    padding: 10px 18px;
+    min-width: 100px;
+    flex: 1 1 auto;
   }
+
+  .info-section {
+    padding: 0 0px;
+    gap: 20px;
+  }
+
+  .description,
+  .materials {
+    font-size: 14px;
+    padding: 0 6px;
+  }
+
+   .info-section h4,
+  .description h4,
+  .materials h4 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .info-section p,
+  .info-section ul {
+    font-size: 14px;
+    padding: 0 1px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+   .views-grid {
+    margin-top: -15px;
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 8px;
+  }
+  
+  .label {
+    font-size: 0.65rem;
+    padding: 3px 8px;
+    margin-left: -5px;
+  }
+
+  .section-divider {
+    margin-top: -140px;
+    margin-bottom: -20px;
+    width: 90%;
+    height: 2px;
+  }
+
 }

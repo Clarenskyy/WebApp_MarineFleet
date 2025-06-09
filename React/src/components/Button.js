@@ -3,7 +3,6 @@ import './Button.css';
 import { Link } from 'react-router-dom';
 
 const STYLES = ['btn--primary', 'btn--outline', 'btn--test'];
-
 const SIZES = ['btn--medium', 'btn--large'];
 
 export const Button = ({
@@ -11,23 +10,38 @@ export const Button = ({
   type,
   onClick,
   buttonStyle,
-  buttonSize
+  buttonSize,
+  to,
+  isAnchor = false
 }) => {
-  const checkButtonStyle = STYLES.includes(buttonStyle)
-    ? buttonStyle
-    : STYLES[0];
-
+  const checkButtonStyle = STYLES.includes(buttonStyle) ? buttonStyle : STYLES[0];
   const checkButtonSize = SIZES.includes(buttonSize) ? buttonSize : SIZES[0];
+  const buttonClass = `btn ${checkButtonStyle} ${checkButtonSize}`;
 
-  return (
-    <Link to='/stream' className='btn-mobile'>
-      <button
-        className={`btn ${checkButtonStyle} ${checkButtonSize}`}
-        onClick={onClick}
-        type={type}
-      >
+  // 1. Internal scroll link (anchor)
+  if (isAnchor && to) {
+    return (
+      <a href={to} className={`btn-mobile ${buttonClass}`} onClick={onClick}>
         {children}
-      </button>
-    </Link>
+      </a>
+    );
+  }
+
+  // 2. React Router navigation
+  if (to) {
+    return (
+      <Link to={to} className='btn-mobile'>
+        <button className={buttonClass} onClick={onClick} type={type}>
+          {children}
+        </button>
+      </Link>
+    );
+  }
+
+  // 3. Plain button
+  return (
+    <button className={buttonClass} onClick={onClick} type={type}>
+      {children}
+    </button>
   );
 };

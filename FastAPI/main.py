@@ -6,6 +6,8 @@ from models import SensorData, PowerState, User
 import requests
 import bcrypt
 
+# uvicorn main:app --host 0.0.0.0 --port 8000
+
 app = FastAPI()
 
 # Dependency to get DB session
@@ -137,39 +139,35 @@ def get_power_status():
 
 
 
+
 @app.post("/signup")
 async def signup(request: Request, db: Session = Depends(get_db)):
     data = await request.json()
-    username = data.get("username")
+    email = data.get("email")
     password = data.get("password")
 
-    if not username or not password:
-        raise HTTPException(status_code=400, detail="Username and password required")
+    if db.query(User).filter(User.email == email).first():
+        raise HTTPException(status_code=400, detail="Email already registered")
 
-    # Check if user already exists
-    if db.query(User).filter(User.username == username).first():
-        raise HTTPException(status_code=400, detail="Username already exists")
-
-    # Hash password
     hashed_pw = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
-
-    new_user = User(username=username, password_hash=hashed_pw)
+    new_user = User(email=email, password_hash=hashed_pw)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
 
-    return {"message": "User created successfully", "user_id": new_user.id}
+    return {"message": "Signup successful", "user_id": new_user.id}
+
 
 
 @app.post("/login")
 async def login(request: Request, db: Session = Depends(get_db)):
     data = await request.json()
-    username = data.get("username")
+    email = data.get("email")
     password = data.get("password")
 
-    user = db.query(User).filter(User.username == username).first()
+    user = db.query(User).filter(User.email == email).first()
     if not user or not bcrypt.checkpw(password.encode("utf-8"), user.password_hash.encode("utf-8")):
-        raise HTTPException(status_code=401, detail="Invalid username or password")
+        raise HTTPException(status_code=401, detail="Invalid email or password")
 
     return {"message": "Login successful", "user_id": user.id}
 

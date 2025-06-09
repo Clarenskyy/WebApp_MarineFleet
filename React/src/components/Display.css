@@ -1,53 +1,80 @@
+/* === Background Setup === */
+.display-wrapper {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  /* Removed video related z-index */
+}
 
+/* === Container Layout === */
 .display-container {
   display: flex;
-  background-color: #d3e0ea;
-  padding: 20px;
   gap: 20px;
-  height: 100%;
+  height: 90vh;
+  padding: 20px;
   box-sizing: border-box;
 }
 
+/* === Camera Section === */
 .camera-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #dbeaf5;
+  background: rgba(0, 0, 0, 0.5); /* darker translucent background */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
   padding: 20px;
-  border-radius: 10px;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  flex: 1;
+  align-items: center;
+  color: white;
 }
 
 .camera-view {
   position: relative;
   width: 100%;
-  max-width: 480px;
-  background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  /* Make camera-view take more vertical space */
+  flex-grow: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 280px; /* enforce minimum height */
 }
 
 .camera-placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 270px;
+  height: 100%;
   font-size: 18px;
   color: #555;
 }
 
+.camera-view img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 .cam-label {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: red;
+  bottom: 8px;
+  left: 8px;
+  background-color: darkred;
   color: white;
-  font-size: 14px;
-  padding: 5px 10px;
-  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 13px;
   font-weight: bold;
-  z-index: 10;
+  border-radius: 6px;
+  user-select: none;
+  pointer-events: none;
 }
 
 .camera-overlay {
@@ -61,82 +88,38 @@
   font-weight: bold;
 }
 
-
-
-.camera-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.camera-view {
-  position: relative;
-  background-color: white;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.camera-view img {
+/* === Control Section (ON/OFF Button) inside camera-section */
+.control-section {
+  background: rgba(255, 255, 255, 0.15); /* darker translucent background */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  padding: 30px;
   width: 100%;
-  height: auto;
-  display: block;
-}
-
-.cam-label {
-  position: absolute;
-  bottom: 8px;
-  left: 8px;
-  background-color: red;
-  color: white;
-  padding: 4px 8px;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 4px;
-}
-
-.dashboard-container{
-  flex: 1;
-  background-color: #f0f4f8;
-  border-radius: 8px;
-  padding: 20px;
-}
-
-.dashboard-section {
-  flex: 1;
-  background-color: #d3e0ea;
-  border-radius: 12px;
-  padding: 20px;
-  min-height: 100%; /* Ensure it can grow with content */
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* Optional */
-}
-
-.control-section{
-  flex: 1;
-  background-color: #f0f4f8;
-  border-radius: 12px;
-  padding: 40px;
-  margin-bottom: 13vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  text-align: center;
+  color: white;
+
+  flex-grow: 1;
+  min-height: 120px;
 }
 
+/* Toggle switch styles */
 .toggle-section {
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-bottom: 10px;
 }
 
 .switch {
   position: relative;
   display: inline-block;
-  width: 100px;   /* Increase or decrease width */
-  height: 46px;  /* Increase or decrease height */
+  width: 100px;
+  height: 46px;
 }
 
 .switch input {
@@ -171,58 +154,186 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-  transform: translateX(53px);    /* Should match the difference between switch width and slider width */
+  transform: translateX(53px);
 }
 
 .toggle-label {
-  font-size: 20px;   /* Increase font size */
+  font-size: 20px;
   font-weight: bold;
+  color: #00d8ff; /* match accent color */
 }
 
 .instruction {
   font-size: 14px;
-  color: #555;
-  margin-top: 15px;
-  text-align: center;
+  color: #e0e0e0; /* lighter for dark background */
+  margin-top: 12px;
 }
 
+/* === Dashboard Section === */
+/* Blur and glass effect for dashboard container */
+.dashboard-container {
+  background: rgba(0, 0, 0, 0.5); /* darker translucent background */
+  backdrop-filter: blur(12px); /* stronger blur */
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  padding: 20px 30px;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* center the content horizontally */
+  color: white; /* text color for contrast */
+}
+
+.dashboard-section {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* center the content horizontally */
+  gap: 20px;
+}
+
+/* === Status Dashboard === */
 .status-section {
-  margin-top: -100px;  /* top "Dashboard" margin */
-  padding: 0px 20px;
+  padding: 30px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.15); /* subtle glass effect */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  flex-grow: 1;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  gap: 10px;
 }
 
 .status-section h2 {
-  font-size: 22px;
-  margin: 4vh;
+  font-size: 40px;
+  font-weight: 600;
   text-align: center;
+  margin-bottom: 20px;
+  color: #00d8ff; /* aesthetic aqua accent */
 }
 
 .status-item {
   display: flex;
-  margin: 20px;
   justify-content: space-between;
-  padding: 20px 0;
-  border-bottom: 1px solid #000
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  font-weight: 500;
+  font-size: 16px;
 }
 
 .status-item-title {
-  display: flex;
-  margin: 20px;
-  justify-content: space-between;
-  padding: 6px 0;
-  margin-bottom: 0;
-}
-
-.status-item.bottom {
-  margin-top: 30px;
-  padding: 8px 0;
-  justify-content: space-between;
+  font-weight: 600;
+  color: #ffffff;
 }
 
 .status-item.notification {
   color: red;
   font-weight: bold;
-  margin-bottom: 20px;
+  text-align: center;
+  border: none;
 }
 
+
+/* Responsive styles for mobile devices */
+@media screen and (max-width: 480px) {
+  .display-wrapper {
+    padding: 10px;
+    margin-top: 30px; /* Adjust based on your footer height */
+  }
+
+  .display-container {
+    flex-direction: column;
+    flex: 1;
+    padding-bottom: 60px; /* Adjust based on your footer height */
+    gap: 20px;
+    padding: 0 10px;
+  }
+
+  .page-container, .display-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .camera-section {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .camera-view img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .camera-placeholder {
+    height: 200px;
+    font-size: 14px;
+  }
+
+  .cam-label {
+    font-size: 12px;
+  }
+
+  .toggle-section {
+    gap: 6px;
+  }
+
+  .toggle-label {
+    font-size: 14px;
+  }
+
+  .switch {
+    width: 50px;
+    height: 28px;
+  }
+
+  .slider:before {
+    height: 20px;
+    width: 20px;
+  }
+
+  .instruction,
+  .notification {
+    font-size: 13px;
+    text-align: center;
+    padding: 0 5px;
+  }
+
+  .dashboard-container {
+    margin-bottom: 30px; /* ensures it's not obscured by the footer */
+  }
+
+  .footer-container {
+    position: relative;
+  }
+
+  .dashboard-section h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .status-item,
+  .status-item-title {
+    font-size: 13px;
+    margin: 5px 0;
+  }
+
+  .status-item .value {
+    font-size: 13px;
+  }
+}
 

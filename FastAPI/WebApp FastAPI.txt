@@ -1,0 +1,15 @@
+// FAST API SETUP //
+
+phyton -m venv env
+env\Scripts\activate
+pip install fastapi uvicorn sqlalchemy
+uvicorn main:app --reload
+uvicorn main:app --host 0.0.0.0 --port 8000
+
+// REACT.JS SETUP //
+npx create-react-app my-app
+cd my-app
+npm install react-router-dom
+npm install axios 
+npm install tailwindcss 
+npm start

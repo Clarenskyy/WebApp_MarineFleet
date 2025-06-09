@@ -1,0 +1,135 @@
+.login-page-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Arial', sans-serif;
+}
+
+.login-container {
+  position: relative;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 40px 30px;
+  background: rgba(0, 0, 0, 0.7); /* semi-transparent card */
+  border-radius: 10px;
+  color: white;
+  margin-top: 80px;
+  z-index: 1;
+}
+
+.login-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+.tab-selector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab.active {
+  background-color: white;
+  color: black;
+}
+
+.tab:not(:last-child) {
+  margin-right: 10px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-input {
+  padding: 12px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 5px;
+}
+
+.login-submit {
+  padding: 12px;
+  background-color: #00d4ff;
+  border: none;
+  border-radius: 5px;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-submit:hover {
+  background-color: #00a0cc;
+}
+
+.forgot-password {
+  text-align: left;
+  font-size: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.login-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.footer-link {
+  color: #00d4ff;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+/* Responsive design for mobile screens */
+@media screen and (max-width: 480px) {
+  .login-page-wrapper{
+    margin-bottom: 30%;
+    height: fit-content;
+  }
+  
+  .login-container {
+    padding: 25px 20px;
+    max-width: 80%;
+  }
+
+  .login-title {
+    font-size: 22px;
+  }
+
+  .tab {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  .login-input {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .login-submit {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .forgot-password {
+    font-size: 13px;
+  }
+
+  .login-footer {
+    font-size: 13px;
+  }
+}
