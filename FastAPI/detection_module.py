@@ -34,7 +34,21 @@ def roboflow_crack_detector():
     last_inference = 0
     inference_interval = 2.0
 
-    while True:
+def roboflow_crack_detector():
+    global latest_predictions, reader, stop_thread
+
+    API_KEY = "PoT0jzGUtNb0bQOEf0Ja"
+    MODEL_ENDPOINT = "https://detect.roboflow.com/underwater-crack-detection/3"
+    PIXELS_PER_MM = 3.2
+
+    reader.start()
+    time.sleep(3)
+    print("✅ Crack detection thread started")
+
+    last_inference = 0
+    inference_interval = 2.0
+
+    while not stop_thread:
         frame = reader.get_frame()
         if frame is None:
             time.sleep(0.2)
@@ -49,6 +63,7 @@ def roboflow_crack_detector():
             success, buffer = cv2.imencode('.jpg', frame)
             if not success:
                 continue
+
             image_base64 = base64.b64encode(buffer).decode('utf-8')
 
             params = {
@@ -77,6 +92,9 @@ def roboflow_crack_detector():
 
         print("🧠 Predictions:", latest_predictions)
         time.sleep(0.1)
+
+    print("🛑 Detection thread stopped.")
+
 
 def start_detection():
     global reader_thread, stop_thread

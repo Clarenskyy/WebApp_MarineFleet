@@ -161,7 +161,9 @@ import requests
 
 ESP32_IP = "192.168.62.54"  # Set your actual ESP32 IP
 
-'''
+
+    
+
 @app.get("/power-status")
 def get_power_status():
     try:
@@ -181,6 +183,7 @@ def get_power_status():
             "status": "off",
             "esp32_online": False
         }
+    
 '''
 
 @app.get("/power-status")
@@ -190,6 +193,8 @@ def get_power_status():
         "status": "on",
         "esp32_online": True
     }
+
+'''
 
 
 
