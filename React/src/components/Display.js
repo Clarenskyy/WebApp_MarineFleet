@@ -7,7 +7,9 @@ function Display() {
   const [left, setLeft] = useState(100);
   const [right, setRight] = useState(100);
   const [motorSpeed, setMotorSpeed] = useState(0);
+  const [crackDetections, setCrackDetections] = useState([]);
   const [rudderDirection, setRudderDirection] = useState("Going straight...");
+  const PIXELS_PER_CM = 32;
   const [esp32Status, setEsp32Status] = useState(""); // ⚠️ ESP32 connectivity warnings
 
   const ESP32_IP = "192.168.62.54";
@@ -88,6 +90,20 @@ function Display() {
     }
   }, [isOn]);
 
+  useEffect(() => {
+  const interval = setInterval(async () => {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/crack-detections");
+      const data = await res.json();
+      setCrackDetections(data.predictions);  // show these in UI
+    } catch (err) {
+      console.error("Failed to fetch crack detections:", err);
+    }
+  }, 2000);
+  return () => clearInterval(interval);
+}, []);
+
+
   return (
     <div className="display-container">
       {/* VIDEO DISPLAY */}
@@ -95,7 +111,7 @@ function Display() {
         <div className="camera-view">
           {isOn ? (
             <img
-              src={`http://${ESP32_IP}`}
+              src={`http://127.0.0.1:8000/video-feed`}
               alt="ESP32-CAM Stream"
               style={{ width: "100%", maxWidth: "480px", border: "1px solid #ccc" }}
             />
@@ -140,6 +156,22 @@ function Display() {
             <div className="status-item">
               <strong>Camera Status:</strong>{" "}
               <span className="value">{isOn ? "Active" : "Inactive"}</span>
+            </div>
+            <div className="status-item">
+              <strong>Crack Detections:</strong>
+              {crackDetections.length > 0 ? (
+                <ul>
+                  {crackDetections.map((det, idx) => (
+                    <li key={idx}>
+                      {det.class} - Confidence: {(det.confidence * 100).toFixed(1)}% — 
+                      Width: {(det.width / PIXELS_PER_CM).toFixed(2)} cm, 
+                      Height: {(det.height / PIXELS_PER_CM).toFixed(2)} cm
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No cracks detected</p>
+              )}
             </div>
             <div className="status-item">
               <strong>Motor Speed:</strong> <span className="value">{motorSpeed} rpm</span>

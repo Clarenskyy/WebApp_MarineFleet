@@ -1,14 +1,29 @@
 from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from database import SessionLocal
 from models import SensorData, PowerState, User
+import numpy as np
 import requests
 import bcrypt
+import time
+import cv2
+from fastapi import FastAPI
+from threading import Thread
+from contextlib import asynccontextmanager
+from detection_module import process_with_roboflow, get_latest_frame, roboflow_crack_detector, get_latest_predictions, stop_detection, start_detection
 
 # uvicorn main:app --host 0.0.0.0 --port 8000
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    start_detection()
+    yield  # Wait for shutdown
+    stop_detection()  # Cleanup on shutdown
+
+app = FastAPI(lifespan=lifespan)
 
 # Dependency to get DB session
 def get_db():
@@ -21,13 +36,44 @@ def get_db():
 # CORS for frontend access - allow all origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 ESP32_IP = "192.168.62.54"
+
+def generate_annotated_stream():
+    while True:
+        frame = get_latest_frame()
+        if frame is None:
+            time.sleep(0.05)
+            continue
+
+        # Process with Roboflow
+        processed = process_with_roboflow(frame)
+
+        # Encode to JPEG
+        ret, jpeg = cv2.imencode('.jpg', processed)
+        if not ret:
+            continue
+
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n')
+
+        time.sleep(0.05)
+
+@app.get("/crack-detections")
+def crack_detections():
+    preds = get_latest_predictions()
+    print("🔍 Returned predictions:", preds)
+    return {"predictions": preds}
+
+@app.get("/video-feed")
+def video_feed():
+    return StreamingResponse(generate_annotated_stream(), media_type="multipart/x-mixed-replace; boundary=frame")
+
 
 @app.post("/update-sensors")
 async def update_sensors(request: Request, db: Session = Depends(get_db)):
@@ -115,6 +161,7 @@ import requests
 
 ESP32_IP = "192.168.62.54"  # Set your actual ESP32 IP
 
+'''
 @app.get("/power-status")
 def get_power_status():
     try:
@@ -134,7 +181,15 @@ def get_power_status():
             "status": "off",
             "esp32_online": False
         }
+'''
 
+@app.get("/power-status")
+def get_power_status():
+    # TEMPORARY MOCK RESPONSE FOR TESTING
+    return {
+        "status": "on",
+        "esp32_online": True
+    }
 
 
 

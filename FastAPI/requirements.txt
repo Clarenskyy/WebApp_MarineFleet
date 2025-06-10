@@ -4,3 +4,5 @@ python-multipart
 opencv-python
 aiofiles
 requests  # for Roboflow API
+opencv-python
+numpy
