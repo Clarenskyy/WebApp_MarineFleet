@@ -127,12 +127,7 @@ function Display() {
           )}
           <div className="cam-label">ESP32-CAM</div>
         </div>
-      </div>
-
-      {/* ON & OFF Button */}
-      <div className="dashboard-container">
-        <div className="dashboard-section">
-          <div className="control-section">
+                  <div className="control-section">
             <div className="toggle-section">
               <label className="switch">
                 <input type="checkbox" checked={isOn} onChange={toggleSwitch} />
@@ -149,6 +144,11 @@ function Display() {
               </div>
             )}
           </div>
+      </div>
+
+      {/* ON & OFF Button */}
+      <div className="dashboard-container">
+        <div className="dashboard-section">
 
           {/* DASHBOARD DISPLAY */}
           <div className="status-section">
