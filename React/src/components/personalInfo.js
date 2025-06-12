@@ -13,13 +13,13 @@ const PersonalInfo = () => {
       name: 'Belicina, Andrei Lester', 
       role: 'Model/Electrical Designer - Boat Construction',
       image: '/images/andrei.jpg',
-      description: "Designed and constructed the boat's physical model, including the precise placement of components and wiring.  This involved creating a stable and buoyant structure, ensuring proper placement of components for optimal functionality, and assisting with wiring and testing."
+      description: "Designed and constructed the boat's physical model.  Responsible for the baot architecturre and construction. This involved creating a stable and buoyant structure, ensuring sufficient space for components and wiring to achieve optimal functionality."
     },
     { 
       name: 'Betasa, Mark Ian', 
-      role: 'Project Manager - Electrical & ESP32 Developer',
-      image: '/images/mark.jpg',
-      description: 'Led the hardware development, focusing on electrical components and the ESP32 microcontroller.  Responsibilities included designing the circuit board, selecting appropriate components, managing connections, and developing the firmware for the ESP32 to control the hardware and communicate with the web application.  This involved extensive testing and troubleshooting to ensure all components functioned correctly.'
+      role: 'Project Manager - Head Electrical & Embedded Systems Engineer',
+      image: '/images/mark.png',
+      description: 'The leader of the autonomous marine fleet. Lead and oversighted all aspects of electrical system design, hardware integration, and embedded system (microcontroller) integration. Programmed and optimized the ESP32 microcontroller to meet the desired real-time performance and control requirements. Furthermore, responsible for the schematic diagram, software-hardware integration, troubleshooting and testing of the system. '
     },
     { 
       name: 'Crisostomo, Joshua', 
@@ -35,27 +35,27 @@ const PersonalInfo = () => {
     },
     { 
       name: 'Diaz, Jestro', 
-      role: 'Electrical Technician',
+      role: 'Assistant Electrical Engineer',
       image: '/images/jestro.jpg',
-      description: 'Responsible for the soldering and connection of wires, ensuring proper and safe connections.  Guided proper wiring techniques to the team.'
+      description: 'Assistant to the head electrical engineer. Responsible for wiring and soldering electronic components, ensuring secure and reliable connections. Also tasked with safeguarding the system by maintaining proper insulation, organization, and adherence to safety standards during assembly and operation.'
     },
     { 
       name: 'Egana, Mary Elizabeth', 
       role: 'Electrical Technician - Housing Design',
       image: '/images/mary.jpg',
-      description: 'Connected wires to their designated locations, sealed them with electrical tape for safety, and contributed ideas for the housing design and component arrangement.'
+      description: 'Connected wires to their designated locations, sealed them with electrical tape for Connected wires to their designated terminals, secured them using appropriate insulation methods, and contributed to the housing design and component layout to enhance system efficiency and organization.safety, and contributed ideas for the housing design and component arrangement.'
     },
     { 
       name: 'Geva, Nino Mynel', 
       role: 'Electrical Technician - Housing Design',
       image: '/images/mynel.jpg',
-      description: "Connected wires to resistors and other components, sealed connections with electrical tape, and ensured components were correctly positioned within the housing to prevent wire tangling."
+      description: "Responsible for the safe handling of sensors, particularly the voltage dividers, which played a critical role in protecting the sensors from overvoltage. Ensured proper installation and configuration to maintain sensor integrity and prevent potential damage during operation."
     },
     { 
       name: 'Lauron, Clarnece Cristopher', 
       role: 'Electrical Technician - Boat Construction',
       image: '/images/lauron.jpg',
-      description: "Connected wires to components, ensuring proper functionality, and assisted in developing the rudder mechanism for smooth boat maneuvering."
+      description: "Mainly responsible for the planning and procurement of materials and components needed. Also aided in wiring the system of the boat."
     },
   ];
 
@@ -64,7 +64,7 @@ const PersonalInfo = () => {
       {/* Removed background video and overlay */}
       <div className="about-container">
         <div className="about-box">
-          <h2 className="about-title">ROLES & INFORMATION</h2>
+          <h2 className="about-title">TEAM</h2>
           <div className="profile-grid">
             {teamMembers.map((member, index) => (
               <div className="profile-card" key={index}>

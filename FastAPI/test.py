@@ -102,7 +102,7 @@ def roboflow_crack_detection():
     """ESP32-CAM crack detection with Roboflow API and simplified measurements visualization."""
     
     # Configuration
-    ESP32_CAM_URL = "http://192.168.18.169/stream"
+    ESP32_CAM_URL = "http://192.168.62.164/stream"
     API_KEY = "PoT0jzGUtNb0bQOEf0Ja"
     MODEL_ENDPOINT = "https://detect.roboflow.com/underwater-crack-detection/3"
     

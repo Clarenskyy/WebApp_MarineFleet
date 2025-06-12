@@ -13,7 +13,7 @@ reader = None
 reader_thread = None
 stop_thread = False
 
-reader = ESP32MJPEGReader("http://192.168.18.169/stream")
+reader = ESP32MJPEGReader("http://192.168.62.164/stream")
 reader.start()
 
 def get_latest_predictions():

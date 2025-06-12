@@ -10,7 +10,7 @@
 .display-container {
   display: flex;
   gap: 20px;
-  height: 90vh;
+  flex: 1;
   padding: 20px;
   box-sizing: border-box;
 }

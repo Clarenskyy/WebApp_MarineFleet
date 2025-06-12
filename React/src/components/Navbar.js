@@ -1,14 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button } from "./Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../AuthContext"; // Make sure this path is correct
 import "./Navbar.css";
 
 function Navbar() {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
+  const { isAuthenticated, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/"); // Redirect to home after logout
+    closeMobileMenu();
+  };
 
   const showButton = () => {
     if (window.innerWidth <= 960) {
@@ -60,13 +69,19 @@ function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link
-                to="/login"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                Login/Signup
-              </Link>
+              {isAuthenticated ? (
+                <span className="nav-links logout-link" onClick={handleLogout}>
+                  Logout
+                </span>
+              ) : (
+                <Link
+                  to="/login"
+                  className="nav-links"
+                  onClick={closeMobileMenu}
+                >
+                  Login/Signup
+                </Link>
+              )}
             </li>
           </ul>
         </div>
