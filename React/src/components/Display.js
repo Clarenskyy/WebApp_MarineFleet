@@ -162,11 +162,11 @@ function Display() {
               {crackDetections.length > 0 ? (
                 <ul>
                   {crackDetections.map((det, idx) => (
-                    <li key={idx}>
-                      {det.class} - Confidence: {(det.confidence * 100).toFixed(1)}% — 
-                      Width: {(det.width / PIXELS_PER_CM).toFixed(2)} cm, 
-                      Height: {(det.height / PIXELS_PER_CM).toFixed(2)} cm
-                    </li>
+                    <ul key={idx}>
+                      <span className="value">{det.class} - Confidence: {(det.confidence * 100).toFixed(1)}%</span><br/>
+                      <span className="value">Width: {(det.width / PIXELS_PER_CM).toFixed(2)} cm</span> <br/>
+                      <span className="value">Height: {(det.height / PIXELS_PER_CM).toFixed(2)} cm </span>
+                    </ul>
                   ))}
                 </ul>
               ) : (

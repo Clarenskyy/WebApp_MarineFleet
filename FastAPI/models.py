@@ -17,6 +17,17 @@ class SensorData(Base):
     rudder_direction = Column(String)
     timestamp = Column(DateTime, default=datetime.utcnow)
 
+class CrackDetection(Base):
+    __tablename__ = "crack_detections"
+
+    id = Column(Integer, primary_key=True, index=True)
+    label = Column(String)
+    confidence = Column(Float)
+    x = Column(Float)
+    y = Column(Float)
+    width = Column(Float)
+    height = Column(Float)
+    timestamp = Column(DateTime, default=datetime.utcnow)
 
 
 class PowerState(Base):

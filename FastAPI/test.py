@@ -103,8 +103,8 @@ def roboflow_crack_detection():
     
     # Configuration
     ESP32_CAM_URL = "http://192.168.62.164/stream"
-    API_KEY = "PoT0jzGUtNb0bQOEf0Ja"
-    MODEL_ENDPOINT = "https://detect.roboflow.com/underwater-crack-detection/3"
+    API_KEY = "6Cy7Zmk3RXJfqwe9PUB8"
+    MODEL_ENDPOINT = "https://detect.roboflow.com/crack-detection-ypnwo-lezeg/1"
     
     # Calibration factor: pixels per millimeter
     # You need to adjust this based on your camera setup and distance to object

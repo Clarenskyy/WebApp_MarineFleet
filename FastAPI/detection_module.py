@@ -21,10 +21,16 @@ def get_latest_predictions():
 
 def roboflow_crack_detector():
     global latest_predictions, reader
+
+    API_KEY = "6Cy7Zmk3RXJfqwe9PUB8"
+    MODEL_ENDPOINT = "https://detect.roboflow.com/crack-detection-ypnwo-lezeg/1"
+    PIXELS_PER_MM = 3.2
+
+    '''
     API_KEY = "PoT0jzGUtNb0bQOEf0Ja"
     MODEL_ENDPOINT = "https://detect.roboflow.com/underwater-crack-detection/3"
     PIXELS_PER_MM = 3.2
-
+    '''
 
     reader.start()
 
@@ -37,8 +43,8 @@ def roboflow_crack_detector():
 def roboflow_crack_detector():
     global latest_predictions, reader, stop_thread
 
-    API_KEY = "PoT0jzGUtNb0bQOEf0Ja"
-    MODEL_ENDPOINT = "https://detect.roboflow.com/underwater-crack-detection/3"
+    API_KEY = "6Cy7Zmk3RXJfqwe9PUB8"
+    MODEL_ENDPOINT = "https://detect.roboflow.com/crack-detection-ypnwo-lezeg/1"
     PIXELS_PER_MM = 3.2
 
     reader.start()
@@ -111,8 +117,8 @@ def get_latest_frame():
 
 # ✅ This is the function you can use in main.py to draw annotations on frames
 def process_with_roboflow(frame):
-    API_KEY = "PoT0jzGUtNb0bQOEf0Ja"
-    MODEL_ENDPOINT = "https://detect.roboflow.com/underwater-crack-detection/3"
+    API_KEY = "6Cy7Zmk3RXJfqwe9PUB8"
+    MODEL_ENDPOINT = "https://detect.roboflow.com/crack-detection-ypnwo-lezeg/1"
 
     try:
         success, buffer = cv2.imencode('.jpg', frame)

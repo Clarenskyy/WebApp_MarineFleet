@@ -31,7 +31,7 @@ const PersonalInfo = () => {
       name: 'Dela Cruz, Clarence Kieth', 
       role: 'Software - Backend Developer',
       image: '/images/klay.jpg',
-      description: "Developed the server-side logic and APIs for the web application. This involved designing database schemas, writing server-side code to handle data requests, and ensuring efficient data management and security.  Responsibilities included creating and managing the application's database, implementing security measures, and ensuring seamless communication between the frontend and backend."
+      description: "Developed the server-side logic and APIs for the web application. This involved designing database schemas, writing server-side code to handle data requests, and ensuring efficient data management and security.  Responsibilities included creating and managing the application's database, implementing security measures, and ensuring seamless communication between the frontend, backend and device."
     },
     { 
       name: 'Diaz, Jestro', 
